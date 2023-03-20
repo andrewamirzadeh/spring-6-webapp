@@ -32,13 +32,8 @@ public class BootstrapData implements CommandLineRunner {
         ddd.setTitle("Domain Driven Design");
         ddd.setIsbn("123456");
 
-        Publisher fff = new Publisher();
-        fff.setPublisherName("Penguin");
-        fff.setState("FL");
-
         Author ericSaved = authorRepository.save(eric);
         Book dddSaved = bookRepository.save(ddd);
-        Publisher fffSaved = publisherRepository.save(fff);
 
         Author rod = new Author();
         rod.setFirstName("Rod");
@@ -53,14 +48,28 @@ public class BootstrapData implements CommandLineRunner {
 
         ericSaved.getBooks().add(dddSaved);
         rodSaved.getBooks().add(noEJBSaved);
+        dddSaved.getAuthors().add(ericSaved);
+        noEJBSaved.getAuthors().add(rodSaved);
+
+        Publisher publisher = new Publisher();
+        publisher.setPublisherName("My Publisher");
+        publisher.setAddress("123 Main");
+        Publisher savedPublisher = publisherRepository.save(publisher);
+
+        dddSaved.setPublisher(savedPublisher);
+        noEJB.setPublisher(savedPublisher);
+
 
         authorRepository.save(ericSaved);
         authorRepository.save(rodSaved);
-        publisherRepository.save(fffSaved);
+        bookRepository.save(dddSaved);
+        bookRepository.save(noEJBSaved);
 
         System.out.println("In Bootstrap");
         System.out.println("Author Count: " + authorRepository.count());
         System.out.println("Book Count: " + bookRepository.count());
-        System.out.println("Publisher count: " + publisherRepository.count());
+
+
+        System.out.println("Publisher Count: " + publisherRepository.count());
     }
 }
